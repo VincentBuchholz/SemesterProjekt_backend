@@ -20,8 +20,8 @@ public class SetupTestUsers {
     // Also, either delete this file, when users are created or rename and add to .gitignore
     // Whatever you do DO NOT COMMIT and PUSH with the real passwords
 
-    User user = new User("user", "test123");
-    User admin = new User("coach", "test123");
+    User user = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211");
+    User admin = new User("coach", "test123","Hans","Svendsen","hans@coach.dk","+4599112233");
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
@@ -29,8 +29,8 @@ public class SetupTestUsers {
     em.getTransaction().begin();
     Role userRole = new Role("user");
     Role adminRole = new Role("coach");
-    user.addRole(userRole);
-    admin.addRole(adminRole);
+    user.setRole(userRole);
+    admin.setRole(adminRole);
 
     em.persist(userRole);
     em.persist(adminRole);

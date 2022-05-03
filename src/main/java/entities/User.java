@@ -3,49 +3,65 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name = "User.deleteAllRows", query = "DELETE from User")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private int id;
+
   @Basic(optional = false)
   @NotNull
   @Column(name = "user_name", length = 25)
   private String userName;
+
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 255)
   @Column(name = "user_pass")
   private String userPass;
-  @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-    @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-  @ManyToMany
-  private List<Role> roleList = new ArrayList<>();
 
-  public List<String> getRolesAsStrings() {
-    if (roleList.isEmpty()) {
-      return null;
-    }
-    List<String> rolesAsStrings = new ArrayList<>();
-    roleList.forEach((role) -> {
-        rolesAsStrings.add(role.getRoleName());
-      });
-    return rolesAsStrings;
-  }
+  @ManyToOne
+  @JoinColumn(name = "role_name")
+  private Role role;
+//  @JoinTable(name = "user_roles", joinColumns = {
+//    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
+//    @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+//  @ManyToMany
+//  private List<Role> roleList = new ArrayList<>();
+
+  @Column(name = "first_name")
+  private String firstName;
+
+  @Column(name = "last_name")
+  private String lastName;
+
+  @Column(name = "email")
+  private String email;
+
+  @Column(name = "phone")
+  private String phone;
+
+
+//  public List<String> getRolesAsStrings() {
+//    if (roleList.isEmpty()) {
+//      return null;
+//    }
+//    List<String> rolesAsStrings = new ArrayList<>();
+//    roleList.forEach((role) -> {
+//        rolesAsStrings.add(role.getRoleName());
+//      });
+//    return rolesAsStrings;
+//  }
 
   public User() {}
 
@@ -53,12 +69,21 @@ public class User implements Serializable {
         return(BCrypt.checkpw(pw,userPass));
     }
 
-  public User(String userName, String userPass) {
-    this.userName = userName;
 
+
+  public User(String userName, String userPass, String firstName, String lastName, String email, String phone) {
+    this.userName = userName;
     this.userPass = BCrypt.hashpw(userPass,BCrypt.gensalt(12));
+    this.firstName=firstName;
+    this.lastName=lastName;
+    this.email=email;
+    this.phone=phone;
   }
 
+  public User(String userName,String userPass) {
+    this.userName = userName;
+    this.userPass = BCrypt.hashpw(userPass,BCrypt.gensalt(12));
+  }
 
   public String getUserName() {
     return userName;
@@ -76,16 +101,51 @@ public class User implements Serializable {
     this.userPass = userPass;
   }
 
-  public List<Role> getRoleList() {
-    return roleList;
+  public Role getRole() {
+    return role;
   }
 
-  public void setRoleList(List<Role> roleList) {
-    this.roleList = roleList;
+  public void setRole(Role role) {
+    this.role=role;
   }
 
-  public void addRole(Role userRole) {
-    roleList.add(userRole);
+  public String getFirstName() {
+    return firstName;
   }
 
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 }

@@ -51,7 +51,7 @@ public class LoginEndpoint {
 
         try {
             User user = USER_FACADE.getVeryfiedUser(username, password);
-            String token = createToken(username, user.getRolesAsStrings());
+            String token = createToken(username, user.getRole().getRoleName());
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("username", username);
             responseJson.addProperty("token", token);
@@ -66,14 +66,7 @@ public class LoginEndpoint {
         throw new AuthenticationException("Invalid username or password! Please try again");
     }
 
-    private String createToken(String userName, List<String> roles) throws JOSEException {
-
-        StringBuilder res = new StringBuilder();
-        for (String string : roles) {
-            res.append(string);
-            res.append(",");
-        }
-        String rolesAsString = res.length() > 0 ? res.substring(0, res.length() - 1) : "";
+    private String createToken(String userName, String role) throws JOSEException {
         String issuer = "semesterstartcode-dat3";
 
         JWSSigner signer = new MACSigner(SharedSecret.getSharedKey());
@@ -81,7 +74,7 @@ public class LoginEndpoint {
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(userName)
                 .claim("username", userName)
-                .claim("roles", rolesAsString)
+                .claim("roles", role)
                 .claim("issuer", issuer)
                 .issueTime(date)
                 .expirationTime(new Date(date.getTime() + TOKEN_EXPIRE_TIME))

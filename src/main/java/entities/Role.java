@@ -2,14 +2,8 @@ package entities;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,6 +13,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "roles")
+@NamedQuery(name = "Role.deleteAllRows", query = "DELETE from Role")
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +23,7 @@ public class Role implements Serializable {
     @Column(name = "role_name", length = 20)
     private String roleName;
     
-    @ManyToMany(mappedBy = "roleList")
+    @OneToMany(mappedBy = "role")
     private List<User> userList;
 
     public Role() {
