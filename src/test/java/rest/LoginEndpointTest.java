@@ -70,7 +70,7 @@ public class LoginEndpointTest {
             em.createQuery("delete from Role").executeUpdate();
 
             Role userRole = new Role("user");
-            Role adminRole = new Role("admin");
+            Role adminRole = new Role("coach");
             User user = new User("user", "test");
             user.addRole(userRole);
             User admin = new User("admin", "test");
@@ -133,9 +133,9 @@ public class LoginEndpointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then()
+                .get("/info/coach").then()
                 .statusCode(200)
-                .body("msg", equalTo("Hello to (admin) User: admin"));
+                .body("msg", equalTo("Hello to (coach) User: admin"));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class LoginEndpointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then() //Call Admin endpoint as user
+                .get("/info/coach").then() //Call Admin endpoint as user
                 .statusCode(401);
     }
 
@@ -180,9 +180,9 @@ public class LoginEndpointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/info/admin").then()
+                .get("/info/coach").then()
                 .statusCode(200)
-                .body("msg", equalTo("Hello to (admin) User: user_admin"));
+                .body("msg", equalTo("Hello to (coach) User: user_admin"));
     }
 
     @Test
