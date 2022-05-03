@@ -32,15 +32,14 @@ public class RequestFacade {
     }
 
     public RequestDTO createRequest(RequestDTO requestDTO){
-        Request request = new Request(requestDTO.getCoachID(),requestDTO.getFirstName(), requestDTO.getLastName(), requestDTO.getEmail(), requestDTO.getDesc());
-        //Request request = new Request(1,"viggo","mogens","viggo@mail.dk","get fit fam");
+        Request request = new Request(requestDTO.getCoachID(),requestDTO.getFirstName(), requestDTO.getLastName(),requestDTO.getEmail(), requestDTO.getDesc());
         EntityManager em = emf.createEntityManager();
-        try {
+        try{
             em.getTransaction().begin();
             em.persist(request);
             em.getTransaction().commit();
             return new RequestDTO(request);
-        }finally {
+        } finally {
             em.close();
         }
     }

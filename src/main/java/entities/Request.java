@@ -6,10 +6,7 @@ import javax.persistence.*;
 @Table(name = "request")
 @NamedQuery(name = "Request.deleteAllRows", query = "DELETE from Request ")
 public class Request {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+
 
     @Column(name = "coach_id")
     private int coachID;
@@ -23,10 +20,18 @@ public class Request {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "desc")
+    @Column(name = "description")
     private String desc;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     public Request() {
+    }
+
+    public Request(int coachID) {
+        this.coachID = coachID;
     }
 
     public Request(int coachID, String firstName, String lastName, String email, String desc) {
@@ -88,7 +93,7 @@ public class Request {
     @Override
     public String toString() {
         return "Request{" +
-                "id=" + id +
+                ", id = " + id +
                 ", coachID=" + coachID +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -96,4 +101,5 @@ public class Request {
                 ", desc='" + desc + '\'' +
                 '}';
     }
+
 }

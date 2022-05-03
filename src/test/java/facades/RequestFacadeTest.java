@@ -1,7 +1,6 @@
 package facades;
 
 import dtos.RequestDTO;
-import entities.Request;
 import entities.Role;
 import entities.User;
 import org.junit.jupiter.api.AfterEach;
@@ -12,8 +11,8 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class RequestFacadeTest {
     private static EntityManagerFactory emf;
@@ -42,7 +41,7 @@ class RequestFacadeTest {
         em.getTransaction().begin();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
-       // em.createNamedQuery("Request.deleteAllRows").executeUpdate();
+        em.createNamedQuery("Request.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
         try{
             em.getTransaction().begin();
@@ -64,7 +63,6 @@ class RequestFacadeTest {
     void createRequestTest() {
         System.out.println("TEST CREATE REQUEST");
         RequestDTO requestDTO = new RequestDTO(coach1.getId(),"viggo","mogens","viggo@mail.dk","get fit fam");
-      //  facade.createRequest(requestDTO);
-        //  assertEquals(1,facade.createRequest(requestDTO).getID());
+        assertEquals(1,facade.createRequest(requestDTO).getID());
     }
 }
