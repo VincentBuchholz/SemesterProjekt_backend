@@ -32,7 +32,7 @@ public class RequestFacade {
     }
 
     public RequestDTO createRequest(RequestDTO requestDTO){
-        Request request = new Request(requestDTO.getCoachID(),requestDTO.getFirstName(), requestDTO.getLastName(),requestDTO.getEmail(), requestDTO.getDesc());
+        Request request = new Request(requestDTO.getCoachID(),requestDTO.getFirstName(), requestDTO.getLastName(),requestDTO.getEmail(),requestDTO.getPhone(), requestDTO.getDesc());
         EntityManager em = emf.createEntityManager();
         try{
             em.getTransaction().begin();

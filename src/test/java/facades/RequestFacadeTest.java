@@ -62,7 +62,7 @@ class RequestFacadeTest {
     @Test
     void createRequestTest() {
         System.out.println("TEST CREATE REQUEST");
-        RequestDTO requestDTO = new RequestDTO(coach1.getId(),"viggo","mogens","viggo@mail.dk","get fit fam");
+        RequestDTO requestDTO = new RequestDTO(coach1.getId(),"viggo","mogens","viggo@mail.dk","645251551","get fit fam");
         assertEquals(1,facade.createRequest(requestDTO).getID());
     }
 }

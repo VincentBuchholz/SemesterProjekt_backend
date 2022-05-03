@@ -121,7 +121,7 @@ public class RequestEndpointTest {
     @Test
     public void testRequestSent() {
 
-        RequestDTO requestDTO = new RequestDTO(1,"karl","fisker","karlfisker@mail.dk","hello there I wanna get big");
+        RequestDTO requestDTO = new RequestDTO(1,"karl","fisker","karlfisker@mail.dk","726151441","hello there I wanna get big");
         String requestBody = GSON.toJson(requestDTO);
 
         given()
@@ -137,6 +137,7 @@ public class RequestEndpointTest {
                 .body("firstName", equalTo("karl"))
                 .body("lastName", equalTo("fisker"))
                 .body("email", equalTo("karlfisker@mail.dk"))
+                .body("phone",equalTo("726151441"))
                 .body("desc", equalTo("hello there I wanna get big"));
     }
 

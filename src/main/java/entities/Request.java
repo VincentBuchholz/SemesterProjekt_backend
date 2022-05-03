@@ -20,6 +20,9 @@ public class Request {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "description")
     private String desc;
 
@@ -30,15 +33,13 @@ public class Request {
     public Request() {
     }
 
-    public Request(int coachID) {
-        this.coachID = coachID;
-    }
 
-    public Request(int coachID, String firstName, String lastName, String email, String desc) {
+    public Request(int coachID, String firstName, String lastName, String email,String phone, String desc) {
         this.coachID = coachID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
         this.desc = desc;
     }
 
@@ -88,6 +89,14 @@ public class Request {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override

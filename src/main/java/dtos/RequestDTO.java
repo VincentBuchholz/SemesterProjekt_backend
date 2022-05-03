@@ -10,6 +10,7 @@ public class RequestDTO {
     private String firstName;
     private String lastName;
     private String email;
+    private String phone;
     private String desc;
 
     public RequestDTO(Request request) {
@@ -20,14 +21,16 @@ public class RequestDTO {
         this.firstName = request.getFirstName();
         this.lastName = request.getLastName();
         this.email = request.getEmail();
+        this.phone = request.getPhone();
         this.desc = request.getDesc();
     }
 
-    public RequestDTO(int coachID, String firstName, String lastName, String email, String desc) {
+    public RequestDTO(int coachID, String firstName, String lastName, String email,String phone, String desc) {
         this.coachID = coachID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phone = phone;
         this.desc = desc;
     }
 
@@ -77,6 +80,22 @@ public class RequestDTO {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override
