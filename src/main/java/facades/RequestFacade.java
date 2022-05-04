@@ -9,6 +9,7 @@ import security.errorhandling.AuthenticationException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.util.Collection;
 import java.util.List;
 public class RequestFacade {
 
@@ -44,4 +45,27 @@ public class RequestFacade {
         }
     }
 
+    public List<RequestDTO> getRequestsByCoachID(int coachID) {
+        List<RequestDTO> requestDTOS;
+
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<RequestDTO> query = em.createQuery("SELECT NEW dtos.RequestDTO(r) FROM Request r where r.coachID =:coachID ", RequestDTO.class);
+            query.setParameter("coachID",coachID);
+            requestDTOS = query.getResultList();
+            return requestDTOS;
+        } finally {
+            em.close();
+        }
+    }
+
+    public RequestDTO getRequestByRequestID(int requestID) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            Request request = em.find(Request.class,requestID);
+            return new RequestDTO(request);
+        } finally {
+            em.close();
+        }
+    }
 }

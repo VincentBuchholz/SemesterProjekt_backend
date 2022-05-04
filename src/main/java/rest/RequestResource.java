@@ -50,4 +50,22 @@ public class RequestResource {
         RequestDTO newPdto = REQUESTFACADE.createRequest(pdto);
         return Response.ok().entity(GSON.toJson(newPdto)).build();
     }
+
+    @GET
+    @Path("/coach/{coachID}")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRequestsByCoach(@PathParam("coachID") int coachID) {
+        List<RequestDTO> requestDTOS = REQUESTFACADE.getRequestsByCoachID(coachID);
+        return Response.ok().entity(GSON.toJson(requestDTOS)).build();
+    }
+
+    @GET
+    @Path("/{requestID}")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRequestByRequestID(@PathParam("requestID") int requestID) {
+        RequestDTO requestDTO = REQUESTFACADE.getRequestByRequestID(requestID);
+        return Response.ok().entity(GSON.toJson(requestDTO)).build();
+    }
 }

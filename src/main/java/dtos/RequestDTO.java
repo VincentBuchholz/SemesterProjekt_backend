@@ -3,6 +3,7 @@ package dtos;
 import entities.Request;
 
 import javax.persistence.Column;
+import java.util.Objects;
 
 public class RequestDTO {
     private int id;
@@ -107,5 +108,18 @@ public class RequestDTO {
                 ", email='" + email + '\'' +
                 ", desc='" + desc + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestDTO that = (RequestDTO) o;
+        return id == that.id && coachID == that.coachID && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phone, that.phone) && Objects.equals(desc, that.desc);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, coachID, firstName, lastName, email, phone, desc);
     }
 }

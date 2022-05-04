@@ -20,6 +20,8 @@ class RequestFacadeTest {
     private static RequestFacade facade;
     User coach1;
     User coach2;
+    Request request1;
+    Request request2;
 
     @BeforeAll
     public static void setUpClass(){
@@ -37,6 +39,9 @@ class RequestFacadeTest {
         coach1.setRole(coachRole);
         coach2.setRole(coachRole);
 
+        request1 = new Request(1,"test1","test1","test1@test.dk","6453424","desc1");
+        request2 = new Request(1,"test2","test2","test2@test.dk","6453424","desc2");
+
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
@@ -50,6 +55,8 @@ class RequestFacadeTest {
             em.persist(coachRole);
             em.persist(coach1);
             em.persist(coach2);
+            em.persist(request1);
+            em.persist(request2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -71,7 +78,18 @@ class RequestFacadeTest {
 
         assertEquals(coach1.getId(), request.getCoachID());
         assertEquals("get fit fam", request.getDesc());
+    }
 
 
+    @Test
+    void getRequestList() {
+        assertEquals(2,facade.getRequestsByCoachID(1).size());
+    }
+
+    @Test
+    void getRequestByID() {
+        RequestDTO requestDTO = new RequestDTO(request1);
+
+        assertEquals(requestDTO,facade.getRequestByRequestID(request1.getId()));
     }
 }

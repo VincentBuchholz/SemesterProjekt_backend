@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.RequestDTO;
+import entities.Request;
 import entities.Role;
 import entities.User;
 import io.restassured.RestAssured;
@@ -21,12 +22,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 //Disabled
 public class RequestEndpointTest {
@@ -38,7 +40,10 @@ public class RequestEndpointTest {
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
+
+    Request request1;
+    Request request2;
+
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -75,17 +80,25 @@ public class RequestEndpointTest {
             //Delete existing users and roles to get a "fresh" database
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
+            em.createQuery("delete from Request").executeUpdate();
+
+            request1 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
+            request2 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
+
+
 
             Role userRole = new Role("user");
             Role adminRole = new Role("coach");
             User user = new User("user", "test");
             user.setRole(userRole);
-            User admin = new User("admin", "test");
+            User admin = new User("coach", "test");
             admin.setRole(adminRole);
             em.persist(userRole);
             em.persist(adminRole);
             em.persist(user);
             em.persist(admin);
+            em.persist(request1);
+            em.persist(request2);
             //System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
@@ -141,4 +154,41 @@ public class RequestEndpointTest {
                 .body("desc", equalTo("hello there I wanna get big"));
     }
 
+    @Test
+    void GetRequestsByCoachIDTest() {
+        login("coach", "test");
+
+        List<RequestDTO> requestDTOS;
+
+        requestDTOS = given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/request/coach/1").then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList("",RequestDTO.class);
+        RequestDTO requestDTO1 = new RequestDTO(request1);
+        RequestDTO requestDTO2 = new RequestDTO(request2);
+        assertThat(requestDTOS,containsInAnyOrder(requestDTO1,requestDTO2));
+    }
+
+    @Test
+    void GetRequestByRequestID() {
+        login("coach", "test");
+
+        RequestDTO requestDTO;
+
+        requestDTO = given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/request/"+request1.getId()).then()
+                .statusCode(200)
+                .extract().body().jsonPath().getObject("",RequestDTO.class);
+        RequestDTO requestDTO1 = new RequestDTO(request1);
+
+        assertThat(requestDTO,equalTo(requestDTO1));
+    }
 }
