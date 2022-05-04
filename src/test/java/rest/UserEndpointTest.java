@@ -136,8 +136,11 @@ public class UserEndpointTest {
         UserDTO userDTO = new UserDTO(user);
         String requestBody = GSON.toJson(userDTO);
 
+        login("coach", "test");
         given()
-                .header("Content-type", ContentType.JSON)
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
                 .and()
                 .body(requestBody)
                 .when()

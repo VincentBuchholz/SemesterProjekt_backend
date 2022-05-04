@@ -36,12 +36,13 @@ public class UserResource {
 //    }
 
     @POST
+    @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createUser(String content){
-        UserDTO pdto = GSON.fromJson(content, UserDTO.class);
-        UserDTO newPdto = USERFACADE.createUser(pdto);
-        return Response.ok().entity(GSON.toJson(newPdto)).build();
+        UserDTO userDTO = GSON.fromJson(content, UserDTO.class);
+        UserDTO newUserDTO = USERFACADE.createUser(userDTO);
+        return Response.ok().entity(GSON.toJson(newUserDTO)).build();
     }
 
 
