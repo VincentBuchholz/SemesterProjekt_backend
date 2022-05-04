@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.RequestDTO;
 import dtos.UserDTO;
+import entities.Request;
 import entities.Role;
 import entities.User;
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +33,7 @@ class UserFacadeTest {
 
     @BeforeEach
     void setUp() {
-        user1 = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211");
+        user1 = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211",2);
         coach1 = new User("coach1", "test123","Hans","Svendsen","hans@coach.dk","+4599112233");
         coach2 = new User("coach2", "test123","Emil","Karlson","emil@coach.dk","+4529112233");
 
@@ -71,5 +73,13 @@ class UserFacadeTest {
             System.out.println(coach);
         }
         assertEquals(2,facade.getCoaches().size());
+    }
+
+    @Test
+    void createUserTest() {
+        System.out.println("Create user test!");
+        User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",coach1.getId());
+        UserDTO userDTO = new UserDTO(user);
+        assertEquals("testuser",facade.createUser(userDTO).getUserName());
     }
 }

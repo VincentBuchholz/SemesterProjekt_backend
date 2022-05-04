@@ -1,6 +1,9 @@
 package facades;
 
+import dtos.RequestDTO;
 import dtos.UserDTO;
+import entities.Request;
+import entities.Role;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -54,6 +57,21 @@ public class UserFacade {
             TypedQuery<UserDTO> query = em.createQuery("SELECT NEW dtos.UserDTO(u) FROM User u where u.role.roleName='coach'", UserDTO.class);
             List<UserDTO> coaches = query.getResultList();
             return coaches;
+        } finally {
+            em.close();
+        }
+    }
+
+    public UserDTO createUser(UserDTO userDTO) {
+        User user = new User(userDTO.getUserName(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhone(), userDTO.getCoachID());
+        EntityManager em = emf.createEntityManager();
+        Role userRole = em.find(Role.class,"user");
+        user.setRole(userRole);
+        try{
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+            return new UserDTO(user);
         } finally {
             em.close();
         }

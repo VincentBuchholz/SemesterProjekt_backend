@@ -17,9 +17,6 @@ import facades.RequestFacade;
 import facades.UserFacade;
 import utils.EMF_Creator;
 
-/**
- * @author lam@cphbusiness.dk
- */
 @Path("request")
 public class RequestResource {
 

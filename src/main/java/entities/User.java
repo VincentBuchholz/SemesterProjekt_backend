@@ -51,17 +51,9 @@ public class User implements Serializable {
   @Column(name = "phone")
   private String phone;
 
+  @Column(name = "coach_id")
+  private int coachID;
 
-//  public List<String> getRolesAsStrings() {
-//    if (roleList.isEmpty()) {
-//      return null;
-//    }
-//    List<String> rolesAsStrings = new ArrayList<>();
-//    roleList.forEach((role) -> {
-//        rolesAsStrings.add(role.getRoleName());
-//      });
-//    return rolesAsStrings;
-//  }
 
   public User() {}
 
@@ -78,6 +70,16 @@ public class User implements Serializable {
     this.lastName=lastName;
     this.email=email;
     this.phone=phone;
+  }
+
+  public User(String userName, String userPass, String firstName, String lastName, String email, String phone,int coachID) {
+    this.userName = userName;
+    this.userPass = BCrypt.hashpw(userPass,BCrypt.gensalt(12));
+    this.firstName=firstName;
+    this.lastName=lastName;
+    this.email=email;
+    this.phone=phone;
+    this.coachID=coachID;
   }
 
   public User(String userName,String userPass) {
@@ -147,5 +149,13 @@ public class User implements Serializable {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public int getCoachID() {
+    return coachID;
+  }
+
+  public void setCoachID(int coachID) {
+    this.coachID = coachID;
   }
 }

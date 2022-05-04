@@ -7,7 +7,6 @@ import javax.persistence.*;
 @NamedQuery(name = "Request.deleteAllRows", query = "DELETE from Request ")
 public class Request {
 
-
     @Column(name = "coach_id")
     private int coachID;
 
