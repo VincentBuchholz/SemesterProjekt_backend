@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.RequestDTO;
 import dtos.UserDTO;
+import errorhandling.UsernameTakenException;
 import facades.RequestFacade;
 import facades.UserFacade;
 import utils.EMF_Creator;
@@ -39,7 +40,7 @@ public class UserResource {
     @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response createUser(String content){
+    public Response createUser(String content) throws UsernameTakenException {
         UserDTO userDTO = GSON.fromJson(content, UserDTO.class);
         UserDTO newUserDTO = USERFACADE.createUser(userDTO);
         return Response.ok().entity(GSON.toJson(newUserDTO)).build();

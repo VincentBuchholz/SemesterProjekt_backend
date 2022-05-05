@@ -67,7 +67,7 @@ public class UserEndpointTest {
     public static void closeTestServer() {
         //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
-        
+
         httpServer.shutdownNow();
     }
 
@@ -83,8 +83,8 @@ public class UserEndpointTest {
             em.createQuery("delete from Role").executeUpdate();
             em.createQuery("delete from Request").executeUpdate();
 
-            request1 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
-            request2 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
+            request1 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
+            request2 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
 
             Role userRole = new Role("user");
             Role adminRole = new Role("coach");
@@ -132,7 +132,7 @@ public class UserEndpointTest {
 
     @Test
     public void testUserCreated() {
-        User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",3);
+        User user = new User("testuser", "testuserpass", "testuser", "testuser", "testuser@mail.dk", "+4565432211", 3);
         UserDTO userDTO = new UserDTO(user);
         String requestBody = GSON.toJson(userDTO);
 
@@ -154,4 +154,25 @@ public class UserEndpointTest {
                 .body("email", equalTo("testuser@mail.dk"));
     }
 
+    @Test
+    public void testCreateUserUsernameIsTaken() {
+        User user = new User("user", "testuserpass", "testuser", "testuser", "testuser@mail.dk", "+4565432211", 3);
+        UserDTO userDTO = new UserDTO(user);
+        String requestBody = GSON.toJson(userDTO);
+
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/user")
+                .then()
+                .assertThat()
+                .statusCode(409)
+                .body("message", equalTo("Username is taken"));
+
+    }
 }

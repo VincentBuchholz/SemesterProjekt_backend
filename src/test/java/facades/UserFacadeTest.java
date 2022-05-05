@@ -5,6 +5,7 @@ import dtos.UserDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
+import errorhandling.UsernameTakenException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +77,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void createUserTest() {
+    void createUserTest() throws UsernameTakenException {
         System.out.println("Create user test!");
         User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",coach1.getId());
         UserDTO userDTO = new UserDTO(user);

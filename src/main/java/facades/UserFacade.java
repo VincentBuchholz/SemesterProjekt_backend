@@ -5,10 +5,10 @@ import dtos.UserDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 
+import javax.persistence.*;
+
+import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
 
 import java.util.Collection;
@@ -62,9 +62,17 @@ public class UserFacade {
         }
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) throws UsernameTakenException {
+
+        System.out.println(usernameTaken(userDTO.getUserName()));
+
+        if(usernameTaken(userDTO.getUserName())){
+            throw new UsernameTakenException("Username is taken");
+        }
+
         User user = new User(userDTO.getUserName(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getPhone(), userDTO.getCoachID());
         EntityManager em = emf.createEntityManager();
+
         Role userRole = em.find(Role.class,"user");
         user.setRole(userRole);
         try{
@@ -75,5 +83,22 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+
+    private static boolean usernameTaken(String username){
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u from User u where u.userName =:username",User.class);
+            query.setParameter("username",username);
+            try {
+                User userFound = query.getSingleResult();
+            } catch (NoResultException e){
+                return false;
+            }
+        }
+        finally {
+            em.close();
+        }
+        return true;
     }
 }
