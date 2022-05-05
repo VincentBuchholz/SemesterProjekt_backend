@@ -11,6 +11,7 @@ import javax.persistence.*;
 import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 public class UserFacade {
@@ -52,11 +53,15 @@ public class UserFacade {
     }
 
     public List<UserDTO> getCoaches(){
+        List<UserDTO> coachDTOs = new ArrayList<>();
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<UserDTO> query = em.createQuery("SELECT NEW dtos.UserDTO(u) FROM User u where u.role.roleName='coach'", UserDTO.class);
-            List<UserDTO> coaches = query.getResultList();
-            return coaches;
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u where u.role.roleName='coach'", User.class);
+            List<User> coaches = query.getResultList();
+            for (User coach : coaches) {
+                coachDTOs.add(new UserDTO(coach.getId(),coach.getFirstName(),coach.getLastName()));
+            }
+            return coachDTOs;
         } finally {
             em.close();
         }
