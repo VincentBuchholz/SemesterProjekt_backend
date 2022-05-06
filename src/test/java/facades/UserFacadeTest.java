@@ -36,8 +36,8 @@ class UserFacadeTest {
 
     @BeforeEach
     void setUp() {
-        user1 = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211",2);
-        user2 = new User("user2", "test123","Karlhans","Larsen","karlhans@larsen.dk","+4565432211",2);
+        user1 = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211");
+        user2 = new User("user2", "test123","Karlhans","Larsen","karlhans@larsen.dk","+4565432211");
         coach1 = new User("coach1", "test123","Hans","Svendsen","hans@coach.dk","+4599112233");
         coach2 = new User("coach2", "test123","Emil","Karlson","emil@coach.dk","+4529112233");
 
@@ -102,10 +102,12 @@ class UserFacadeTest {
     }
 
     @Test
-    void getCustomerByID() {
+    void getCustomerByID() throws UsernameTakenException {
         System.out.println("get customer by id test!");
-        System.out.println(facade.getCustomerByID(user1.getId()));
-        assertEquals("Karl",facade.getCustomerByID(user1.getId()).getFirstName());
+        User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",coach1.getId());
+        UserDTO userDTO = new UserDTO(user);
+        UserDTO newUserDTO = facade.createUser(userDTO);
+        assertEquals("testuser",facade.getCustomerByID(newUserDTO.getId()).getFirstName());
     }
 
     @Test
