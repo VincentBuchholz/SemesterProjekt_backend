@@ -127,7 +127,9 @@ public class UserFacade {
             em.getTransaction().begin();
             em.persist(userNutrition);
             em.getTransaction().commit();
-            return new UserDTO(user);
+            UserDTO newUserDTO = new UserDTO(user);
+            newUserDTO.setNutritionDTO(new UserNutritionDTO(userNutrition));
+            return newUserDTO;
         } finally {
             em.close();
         }
@@ -163,6 +165,18 @@ public class UserFacade {
             em.getTransaction().commit();
             return userNutritionDTO;
 
+        } finally {
+            em.close();
+        }
+    }
+
+    public UserNutritionDTO getNutritionsByUser(int userID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<UserNutrition> query = em.createQuery("SELECT n FROM UserNutrition n where n.userID=:userID", UserNutrition.class);
+            query.setParameter("userID",userID);
+            UserNutrition nutrition = query.getSingleResult();
+            return new UserNutritionDTO(nutrition);
         } finally {
             em.close();
         }

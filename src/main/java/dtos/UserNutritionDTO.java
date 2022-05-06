@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class UserNutritionDTO {
     private int id;
+    private int userID;
     private int calories;
     private int protein;
     private int fat;
@@ -27,7 +28,13 @@ public class UserNutritionDTO {
         this.id = id;
     }
 
+    public int getUserID() {
+        return userID;
+    }
 
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
     public int getCalories() {
         return calories;
@@ -65,6 +72,7 @@ public class UserNutritionDTO {
     public String toString() {
         return "UserNutritionDTO{" +
                 "id=" + id +
+                ", userID=" + userID +
                 ", calories=" + calories +
                 ", protein=" + protein +
                 ", fat=" + fat +
@@ -77,11 +85,11 @@ public class UserNutritionDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserNutritionDTO that = (UserNutritionDTO) o;
-        return id == that.id && calories == that.calories && protein == that.protein && fat == that.fat && carbs == that.carbs;
+        return id == that.id && userID == that.userID && calories == that.calories && protein == that.protein && fat == that.fat && carbs == that.carbs;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, calories, protein, fat, carbs);
+        return Objects.hash(id, userID, calories, protein, fat, carbs);
     }
 }

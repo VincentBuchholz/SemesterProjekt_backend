@@ -122,6 +122,7 @@ public class UserDTO {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", coachID=" + coachID +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
