@@ -174,7 +174,6 @@ public class UserEndpointTest {
                 .assertThat()
                 .statusCode(409)
                 .body("message", equalTo("Username is taken"));
-
     }
 
     @Test

@@ -55,7 +55,14 @@ public class UserResource {
         return Response.ok().entity(GSON.toJson(customersDTOList)).build();
     }
 
-
+    @GET
+    @Path("/customer/{customerID}")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRequestByRequestID(@PathParam("customerID") int customerID) {
+        UserDTO userDTO = USERFACADE.getCustomerByID(customerID);
+        return Response.ok().entity(GSON.toJson(userDTO)).build();
+    }
 
 //    @GET
 //    @Path("/{requestID}")

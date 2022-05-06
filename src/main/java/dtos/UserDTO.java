@@ -31,6 +31,14 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
+    public UserDTO(int id, String firstName, String lastName, String email, String phone) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public int getId() {
         return id;
     }

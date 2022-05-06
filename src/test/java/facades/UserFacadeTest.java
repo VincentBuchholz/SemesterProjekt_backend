@@ -22,6 +22,7 @@ class UserFacadeTest {
     private static UserFacade facade;
 
     User user1;
+    User user2;
     User coach1;
     User coach2;
 
@@ -35,6 +36,7 @@ class UserFacadeTest {
     @BeforeEach
     void setUp() {
         user1 = new User("user", "test123","Karl","Larsen","karl@larsen.dk","+4565432211",2);
+        user2 = new User("user2", "test123","Karlhans","Larsen","karlhans@larsen.dk","+4565432211",2);
         coach1 = new User("coach1", "test123","Hans","Svendsen","hans@coach.dk","+4599112233");
         coach2 = new User("coach2", "test123","Emil","Karlson","emil@coach.dk","+4529112233");
 
@@ -55,6 +57,7 @@ class UserFacadeTest {
             em.persist(userRole);
             em.persist(coachRole);
             em.persist(user1);
+            em.persist(user2);
             em.persist(coach1);
             em.persist(coach2);
             em.getTransaction().commit();
@@ -92,10 +95,14 @@ class UserFacadeTest {
         facade.createUser(userDTO);
         for (UserDTO customer : facade.getCustomersByCoachID(coach1.getId())) {
             System.out.println(customer);
-
         }
         assertEquals(1,facade.getCustomersByCoachID(coach1.getId()).size());
+    }
 
-
+    @Test
+    void getCustomerByID() {
+        System.out.println("get customer by id test!");
+        System.out.println(facade.getCustomerByID(user1.getId()));
+        assertEquals("Karl",facade.getCustomerByID(user1.getId()).getFirstName());
     }
 }

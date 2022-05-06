@@ -83,6 +83,18 @@ public class UserFacade {
         }
     }
 
+    public UserDTO getCustomerByID(int id){
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u where u.id=:id", User.class);
+            query.setParameter("id",id);
+            User customer = query.getSingleResult();
+            return new UserDTO(customer.getId(), customer.getFirstName(), customer.getLastName(),customer.getEmail(),customer.getPhone());
+        } finally {
+            em.close();
+        }
+    }
+
     public UserDTO createUser(UserDTO userDTO) throws UsernameTakenException {
 
         System.out.println(usernameTaken(userDTO.getUserName()));
