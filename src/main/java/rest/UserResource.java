@@ -57,7 +57,7 @@ public class UserResource {
 
     @GET
     @Path("/customer/{customerID}")
-    @RolesAllowed("coach")
+   // @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getRequestByRequestID(@PathParam("customerID") int customerID) {
         UserDTO userDTO = USERFACADE.getCustomerByID(customerID);

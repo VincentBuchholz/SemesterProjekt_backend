@@ -2,12 +2,14 @@ package facades;
 
 import dtos.RequestDTO;
 import dtos.UserDTO;
+import dtos.UserNutritionDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
 
 import javax.persistence.*;
 
+import entities.UserNutrition;
 import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
 
@@ -89,7 +91,14 @@ public class UserFacade {
             TypedQuery<User> query = em.createQuery("SELECT u FROM User u where u.id=:id", User.class);
             query.setParameter("id",id);
             User customer = query.getSingleResult();
-            return new UserDTO(customer.getId(), customer.getFirstName(), customer.getLastName(),customer.getEmail(),customer.getPhone());
+
+            TypedQuery<UserNutritionDTO> nutritionQuery = em.createQuery("SELECT new dtos.UserNutritionDTO(n) FROM UserNutrition n where n.userID=:customerID", UserNutritionDTO.class);
+            nutritionQuery.setParameter("customerID",customer.getId());
+            UserNutritionDTO nutritionDTO = nutritionQuery.getSingleResult();
+
+            UserDTO customerDTO = new UserDTO(customer.getId(), customer.getFirstName(), customer.getLastName(),customer.getEmail(),customer.getPhone());
+            customerDTO.setNutritionDTO(nutritionDTO);
+            return customerDTO;
         } finally {
             em.close();
         }
@@ -108,9 +117,14 @@ public class UserFacade {
 
         Role userRole = em.find(Role.class,"user");
         user.setRole(userRole);
+
         try{
             em.getTransaction().begin();
             em.persist(user);
+            em.getTransaction().commit();
+            UserNutrition userNutrition = new UserNutrition(user.getId(),0,0,0,0);
+            em.getTransaction().begin();
+            em.persist(userNutrition);
             em.getTransaction().commit();
             return new UserDTO(user);
         } finally {

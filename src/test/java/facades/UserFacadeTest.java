@@ -51,6 +51,7 @@ class UserFacadeTest {
         em.getTransaction().begin();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
+        em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
         try{
             em.getTransaction().begin();

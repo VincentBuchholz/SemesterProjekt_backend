@@ -11,6 +11,7 @@ public class UserDTO {
     private String email;
     private int coachID;
     private String password;
+    private UserNutritionDTO nutrition;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -101,6 +102,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserNutritionDTO getNutritionDTO() {
+        return nutrition;
+    }
+
+    public void setNutritionDTO(UserNutritionDTO nutritionDTO) {
+        this.nutrition = nutritionDTO;
     }
 
     @Override
