@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.RequestDTO;
 import dtos.UserDTO;
+import dtos.UserNutritionDTO;
+import errorhandling.NotFoundException;
 import errorhandling.UsernameTakenException;
 import facades.RequestFacade;
 import facades.UserFacade;
@@ -57,11 +59,22 @@ public class UserResource {
 
     @GET
     @Path("/customer/{customerID}")
-   // @RolesAllowed("coach")
+    @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getRequestByRequestID(@PathParam("customerID") int customerID) {
         UserDTO userDTO = USERFACADE.getCustomerByID(customerID);
         return Response.ok().entity(GSON.toJson(userDTO)).build();
+    }
+
+    @PUT
+    @Path("updatenutrition/")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response updateNutrition(String content){
+        UserNutritionDTO userNutritionDTO = GSON.fromJson(content, UserNutritionDTO.class);
+        UserNutritionDTO updatedNutrition = USERFACADE.updateUserNutrition(userNutritionDTO);
+        return Response.ok().entity(GSON.toJson(updatedNutrition)).build();
     }
 
 //    @GET

@@ -2,6 +2,7 @@ package facades;
 
 import dtos.RequestDTO;
 import dtos.UserDTO;
+import dtos.UserNutritionDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
@@ -105,5 +106,17 @@ class UserFacadeTest {
         System.out.println("get customer by id test!");
         System.out.println(facade.getCustomerByID(user1.getId()));
         assertEquals("Karl",facade.getCustomerByID(user1.getId()).getFirstName());
+    }
+
+    @Test
+    void updateUserNutritionTest() throws UsernameTakenException {
+        System.out.println("Update user nutrition test");
+        User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",coach1.getId());
+        UserDTO userDTO = new UserDTO(user);
+        facade.createUser(userDTO);
+        System.out.println(userDTO);
+        UserNutritionDTO userNutritionDTO = userDTO.getNutritionDTO();
+        System.out.println(userNutritionDTO);
+       // facade.updateUserNutrition();
     }
 }

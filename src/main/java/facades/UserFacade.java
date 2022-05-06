@@ -10,6 +10,7 @@ import entities.User;
 import javax.persistence.*;
 
 import entities.UserNutrition;
+import errorhandling.NotFoundException;
 import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
 
@@ -147,5 +148,23 @@ public class UserFacade {
             em.close();
         }
         return true;
+    }
+
+    public UserNutritionDTO updateUserNutrition(UserNutritionDTO userNutritionDTO) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            UserNutrition userNutrition = em.find(UserNutrition.class,userNutritionDTO.getId());
+            userNutrition.setCalories(userNutritionDTO.getCalories());
+            userNutrition.setProtein(userNutritionDTO.getProtein());
+            userNutrition.setFat(userNutritionDTO.getFat());
+            userNutrition.setCarbs(userNutritionDTO.getCarbs());
+            em.getTransaction().begin();
+            em.merge(userNutrition);
+            em.getTransaction().commit();
+            return userNutritionDTO;
+
+        } finally {
+            em.close();
+        }
     }
 }
