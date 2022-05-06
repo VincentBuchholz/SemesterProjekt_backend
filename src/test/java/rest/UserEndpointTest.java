@@ -86,6 +86,7 @@ public class UserEndpointTest {
             request1 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
             request2 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
 
+
             Role userRole = new Role("user");
             Role adminRole = new Role("coach");
             User user = new User("user", "test");
@@ -173,6 +174,20 @@ public class UserEndpointTest {
                 .assertThat()
                 .statusCode(409)
                 .body("message", equalTo("Username is taken"));
+
+    }
+
+    @Test
+    void GetCustomersByCoachIDTest() {
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/customers/1").then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList("",RequestDTO.class);
 
     }
 }

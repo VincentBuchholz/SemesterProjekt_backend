@@ -83,4 +83,19 @@ class UserFacadeTest {
         UserDTO userDTO = new UserDTO(user);
         assertEquals("testuser",facade.createUser(userDTO).getUserName());
     }
+
+    @Test
+    void getCustomersByCoachID() throws UsernameTakenException {
+        System.out.println("get customers by coach test!");
+        User user = new User("testuser", "testuserpass","testuser","testuser","testuser@mail.dk","+4565432211",coach1.getId());
+        UserDTO userDTO = new UserDTO(user);
+        facade.createUser(userDTO);
+        for (UserDTO customer : facade.getCustomersByCoachID(coach1.getId())) {
+            System.out.println(customer);
+
+        }
+        assertEquals(1,facade.getCustomersByCoachID(coach1.getId()).size());
+
+
+    }
 }

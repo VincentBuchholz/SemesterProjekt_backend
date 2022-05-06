@@ -67,6 +67,22 @@ public class UserFacade {
         }
     }
 
+    public List<UserDTO> getCustomersByCoachID(int id){
+        List<UserDTO> customersDTO = new ArrayList<>();
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u where u.coachID=:id", User.class);
+            query.setParameter("id",id);
+            List<User> customers = query.getResultList();
+            for (User customer : customers) {
+                customersDTO.add(new UserDTO(customer.getId(),customer.getFirstName(),customer.getLastName()));
+            }
+            return customersDTO;
+        } finally {
+            em.close();
+        }
+    }
+
     public UserDTO createUser(UserDTO userDTO) throws UsernameTakenException {
 
         System.out.println(usernameTaken(userDTO.getUserName()));
