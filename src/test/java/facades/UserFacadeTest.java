@@ -116,17 +116,16 @@ class UserFacadeTest {
         assertEquals(0,facade.getNutritionsByUser(facade.createUser(userDTO).getId()).getCalories());
     }
 
-  /*  @Test
+    @Test
     void updateUserNutritionTest() throws UsernameTakenException {
         System.out.println("Update user nutrition test");
         User user3 = new User("testuser3", "testuserpass3","testuser3","testuser3","testuser@mail.dk","+4565432211",2);
-        try {
-            facade.createUser(new UserDTO(user3));
-        } catch (UsernameTakenException e) {
-            e.printStackTrace();
-        }
-        UserNutritionDTO userNutritionDTO = facade.getNutritionsByUser(user.getId());
-        System.out.println(userNutritionDTO);
-       // facade.updateUserNutrition();
-    }*/
+        UserDTO userDTO =facade.createUser(new UserDTO(user3));
+        UserNutritionDTO userNutritionDTO = facade.getNutritionsByUser(userDTO.getId());
+        userNutritionDTO.setCalories(3700);
+        userNutritionDTO.setProtein(250);
+        userNutritionDTO.setFat(100);
+        userNutritionDTO.setCarbs(400);
+        assertEquals(3700,facade.updateUserNutrition(userNutritionDTO).getCalories());
+    }
 }
