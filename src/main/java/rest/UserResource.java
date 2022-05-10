@@ -2,12 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.RequestDTO;
+import com.google.gson.JsonObject;
 import dtos.UserDTO;
 import dtos.UserNutritionDTO;
-import errorhandling.NotFoundException;
 import errorhandling.UsernameTakenException;
-import facades.RequestFacade;
+import facades.DiagramFacade;
 import facades.UserFacade;
 import utils.EMF_Creator;
 
@@ -22,6 +21,7 @@ public class UserResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final UserFacade USERFACADE =  UserFacade.getUserFacade(EMF);
+    private static final DiagramFacade DIAGRAM_FACADE =  DiagramFacade.getInstance(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     @Context
     private UriInfo context;
@@ -67,11 +67,22 @@ public class UserResource {
     }
     @GET
     @Path("/nutrition/{customerID}")
-    @RolesAllowed("coach")
+    @RolesAllowed({"coach","user"})
     @Produces({MediaType.APPLICATION_JSON})
     public Response getNutritionByUserID(@PathParam("customerID") int customerID) {
         UserNutritionDTO userNutritionDTO = USERFACADE.getNutritionsByUser(customerID);
         return Response.ok().entity(GSON.toJson(userNutritionDTO)).build();
+    }
+
+    @GET
+    @Path("/macrochart/{customerID}")
+    @RolesAllowed({"coach","user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getMacroChartByUserID(@PathParam("customerID") int customerID) {
+        String chart = DIAGRAM_FACADE.getMacroChartByUserID(customerID);
+        JsonObject jobj = new JsonObject();
+        jobj.addProperty("url",chart);
+        return Response.ok().entity(GSON.toJson(jobj)).build();
     }
 
 
