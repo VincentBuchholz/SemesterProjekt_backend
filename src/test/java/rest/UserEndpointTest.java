@@ -7,6 +7,7 @@ import dtos.UserDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
+import entities.UserNutrition;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
@@ -44,6 +45,8 @@ public class UserEndpointTest {
 
     Request request1;
     Request request2;
+    User user;
+    UserNutrition userNutrition;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -79,22 +82,25 @@ public class UserEndpointTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from UserNutrition ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
             em.createQuery("delete from Request").executeUpdate();
 
             request1 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
             request2 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
+            userNutrition = new UserNutrition(1,3500,50,20,30);
 
 
             Role userRole = new Role("user");
             Role adminRole = new Role("coach");
-            User user = new User("user", "test");
+            user = new User("user", "test");
             user.setRole(userRole);
             User admin = new User("coach", "test");
             admin.setRole(adminRole);
             em.persist(userRole);
             em.persist(adminRole);
+            em.persist(userNutrition);
             em.persist(user);
             em.persist(admin);
             em.persist(request1);
@@ -188,5 +194,20 @@ public class UserEndpointTest {
                 .statusCode(200)
                 .extract().body().jsonPath().getList("",RequestDTO.class);
 
+    }
+
+    @Test
+    void GetMacroChartByCustomerIDTest(){
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/macrochart/1")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("url", notNullValue());
     }
 }
