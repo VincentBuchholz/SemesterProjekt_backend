@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dtos.UserDTO;
 import dtos.UserNutritionDTO;
+import dtos.UserWeighInDTO;
 import errorhandling.UsernameTakenException;
 import facades.DiagramFacade;
 import facades.UserFacade;
@@ -95,6 +96,16 @@ public class UserResource {
         UserNutritionDTO userNutritionDTO = GSON.fromJson(content, UserNutritionDTO.class);
         UserNutritionDTO updatedNutrition = USERFACADE.updateUserNutrition(userNutritionDTO);
         return Response.ok().entity(GSON.toJson(updatedNutrition)).build();
+    }
+
+    @POST
+    @RolesAllowed("user")
+    @Path("updateweight/{userID}/{weight}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response addWeighInByUserID(@PathParam("userID") int userID, @PathParam("weight") double weight ) {
+        UserWeighInDTO userWeighInDTO = USERFACADE.addWeighInByUserID(userID,weight);
+        return Response.ok().entity(GSON.toJson(userWeighInDTO)).build();
     }
 
 //    @GET

@@ -50,6 +50,7 @@ class UserFacadeTest {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
+        em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
         em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
@@ -129,5 +130,12 @@ class UserFacadeTest {
         userNutritionDTO.setFat(100);
         userNutritionDTO.setCarbs(400);
         assertEquals(3700,facade.updateUserNutrition(userNutritionDTO).getCalories());
+    }
+
+    @Test
+    void addWeighInByUserID() throws UsernameTakenException {
+        System.out.println("add weigh in by userID test!");
+        facade.addWeighInByUserID(user1.getId(),80);
+        assertEquals(90,facade.addWeighInByUserID(user1.getId(),90).getWeight());
     }
 }

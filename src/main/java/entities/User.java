@@ -33,11 +33,10 @@ public class User implements Serializable {
   @ManyToOne
   @JoinColumn(name = "role_name")
   private Role role;
-//  @JoinTable(name = "user_roles", joinColumns = {
-//    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-//    @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-//  @ManyToMany
-//  private List<Role> roleList = new ArrayList<>();
+
+
+  @OneToMany(mappedBy = "user")
+  private List<UserWeighIn> weightInList;
 
   @Column(name = "first_name")
   private String firstName;

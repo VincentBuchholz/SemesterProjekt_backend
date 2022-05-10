@@ -3,13 +3,11 @@ package facades;
 import dtos.RequestDTO;
 import dtos.UserDTO;
 import dtos.UserNutritionDTO;
-import entities.Request;
-import entities.Role;
-import entities.User;
+import dtos.UserWeighInDTO;
+import entities.*;
 
 import javax.persistence.*;
 
-import entities.UserNutrition;
 import errorhandling.NotFoundException;
 import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
@@ -180,5 +178,21 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+
+    public UserWeighInDTO addWeighInByUserID(int userID, double weight) {
+        EntityManager em = emf.createEntityManager();
+        UserWeighIn userWeighIn;
+        try{
+            User userFound = em.find(User.class,userID);
+            userWeighIn = new UserWeighIn(userFound,weight);
+            em.getTransaction().begin();
+            em.persist(userWeighIn);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+        return new UserWeighInDTO(userWeighIn);
+
     }
 }
