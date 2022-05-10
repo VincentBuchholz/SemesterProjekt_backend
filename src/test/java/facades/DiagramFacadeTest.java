@@ -4,6 +4,7 @@ import dtos.UserDTO;
 import dtos.UserNutritionDTO;
 import entities.Request;
 import entities.User;
+import entities.UserNutrition;
 import errorhandling.UsernameTakenException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,15 +26,18 @@ class DiagramFacadeTest {
     public static void setUpClass() throws UsernameTakenException {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
         facade = DiagramFacade.getInstance(emf);
-        userFacade = UserFacade.getUserFacade(emf);
-        User user = new User("test","test123","test","test","test@test.dk","2222222");
-        userFacade.createUser(new UserDTO(user));
-        UserNutritionDTO unt = userFacade.getNutritionsByUser(1);
-        unt.setCalories(2500);
-        unt.setProtein(50);
-        unt.setCarbs(20);
-        unt.setFat(30);
-        userFacade.updateUserNutrition(unt);
+
+        UserNutrition un = new UserNutrition(1,3500,50,30,20);
+
+        EntityManager em = emf.createEntityManager();
+
+        try{
+            em.getTransaction().begin();
+            em.persist(un);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
 
     }
 
