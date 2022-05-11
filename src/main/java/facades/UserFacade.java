@@ -195,4 +195,16 @@ public class UserFacade {
         return new UserWeighInDTO(userWeighIn);
 
     }
+
+    public UserWeighInDTO getLatestUserWeighin(int userID) {
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<UserWeighInDTO> query = em.createQuery("SELECT new dtos.UserWeighInDTO(u) from UserWeighIn u where u.user.id =:userID order by u.date desc",UserWeighInDTO.class);
+            query.setParameter("userID",userID);
+            query.setMaxResults(1);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package facades;
 import dtos.RequestDTO;
 import dtos.UserDTO;
 import dtos.UserNutritionDTO;
+import dtos.UserWeighInDTO;
 import entities.Request;
 import entities.Role;
 import entities.User;
@@ -137,5 +138,13 @@ class UserFacadeTest {
         System.out.println("add weigh in by userID test!");
         facade.addWeighInByUserID(user1.getId(),80);
         assertEquals(90,facade.addWeighInByUserID(user1.getId(),90).getWeight());
+    }
+
+    @Test
+    void getLatestWeightByUserID(){
+        System.out.println("Get Latest weight test!");
+        UserWeighInDTO userWeighInDTO = facade.addWeighInByUserID(user1.getId(),81);
+        assertEquals(userWeighInDTO,facade.getLatestUserWeighin(user1.getId()));
+
     }
 }

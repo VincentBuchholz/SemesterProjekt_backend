@@ -23,7 +23,7 @@ public class UserResource {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final UserFacade USERFACADE =  UserFacade.getUserFacade(EMF);
     private static final DiagramFacade DIAGRAM_FACADE =  DiagramFacade.getInstance(EMF);
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     @Context
     private UriInfo context;
 
@@ -107,6 +107,29 @@ public class UserResource {
         UserWeighInDTO userWeighInDTO = USERFACADE.addWeighInByUserID(userID,weight);
         return Response.ok().entity(GSON.toJson(userWeighInDTO)).build();
     }
+
+    @GET
+    @Path("/weightchart/{customerID}")
+    @RolesAllowed({"coach","user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getWeightChart(@PathParam("customerID") int customerID) {
+        String chart = DIAGRAM_FACADE.getWeightChartByUserID(customerID);
+        System.out.println(chart);
+        JsonObject jobj = new JsonObject();
+        jobj.addProperty("url",chart);
+        return Response.ok().entity(GSON.toJson(jobj)).build();
+    }
+
+    @GET
+    @Path("/latestweight/{customerID}")
+    @RolesAllowed({"coach","user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserLatestWeight(@PathParam("customerID") int customerID) {
+        UserWeighInDTO userWeighInDTO = USERFACADE.getLatestUserWeighin(customerID);
+        return Response.ok().entity(GSON.toJson(userWeighInDTO)).build();
+    }
+
+
 
 //    @GET
 //    @Path("/{requestID}")
