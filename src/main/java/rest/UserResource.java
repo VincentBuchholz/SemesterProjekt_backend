@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dtos.MealPlanDTO;
 import dtos.UserDTO;
 import dtos.UserNutritionDTO;
 import dtos.UserWeighInDTO;
@@ -128,6 +129,17 @@ public class UserResource {
         UserWeighInDTO userWeighInDTO = USERFACADE.getLatestUserWeighin(customerID);
         return Response.ok().entity(GSON.toJson(userWeighInDTO)).build();
     }
+    @POST
+    @Path("/mealplan")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response setMealPlan(String content) {
+        MealPlanDTO mealPlanDTO = GSON.fromJson(content, MealPlanDTO.class);
+        MealPlanDTO mealPlanNew = USERFACADE.setMealPlan(mealPlanDTO);
+        return Response.ok().entity(GSON.toJson(mealPlanNew)).build();
+    }
+
 
 
 

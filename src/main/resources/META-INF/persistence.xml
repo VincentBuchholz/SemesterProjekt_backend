@@ -8,6 +8,7 @@
         <class>entities.Request1</class>
         <class>entities.UserNutrition</class>
         <class>entities.UserWeighIn</class>
+        <class>entities.MealPlan</class>
         <!--    <class>entities.RenameMe</class>-->
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>

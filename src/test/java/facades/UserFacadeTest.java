@@ -1,10 +1,7 @@
 package facades;
 
-import dtos.RequestDTO;
-import dtos.UserDTO;
-import dtos.UserNutritionDTO;
-import dtos.UserWeighInDTO;
-import entities.Request;
+import dtos.*;
+import entities.MealPlan;
 import entities.Role;
 import entities.User;
 import errorhandling.UsernameTakenException;
@@ -51,6 +48,7 @@ class UserFacadeTest {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
+        em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
         em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
@@ -146,5 +144,14 @@ class UserFacadeTest {
         UserWeighInDTO userWeighInDTO = facade.addWeighInByUserID(user1.getId(),81);
         assertEquals(userWeighInDTO,facade.getLatestUserWeighin(user1.getId()));
 
+    }
+
+    @Test
+    void setMealPlanByUserIDTest() {
+        System.out.println("Set mealplan test!");
+        MealPlanDTO mealPlanDTO1 = new MealPlanDTO(new MealPlan(user1,"test.pdf"));
+        MealPlanDTO mealPlanDTO2 = new MealPlanDTO(new MealPlan(user1,"test2.pdf"));
+        facade.setMealPlan(mealPlanDTO1);
+       assertEquals("test2.pdf",facade.setMealPlan(mealPlanDTO2).getFileName());
     }
 }
