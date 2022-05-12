@@ -147,11 +147,21 @@ class UserFacadeTest {
     }
 
     @Test
-    void setMealPlanByUserIDTest() {
+    void setMealPlanTest() {
         System.out.println("Set mealplan test!");
         MealPlanDTO mealPlanDTO1 = new MealPlanDTO(new MealPlan(user1,"test.pdf"));
         MealPlanDTO mealPlanDTO2 = new MealPlanDTO(new MealPlan(user1,"test2.pdf"));
         facade.setMealPlan(mealPlanDTO1);
        assertEquals("test2.pdf",facade.setMealPlan(mealPlanDTO2).getFileName());
+    }
+
+    @Test
+    void getMealPlanByUserID() {
+        System.out.println("get mealplan test!");
+        MealPlanDTO mealPlanDTO1 = new MealPlanDTO(new MealPlan(user1,"test.pdf"));
+        MealPlanDTO mealPlanDTO2 = new MealPlanDTO(new MealPlan(user1,"test2.pdf"));
+        facade.setMealPlan(mealPlanDTO1);
+        facade.setMealPlan(mealPlanDTO2);
+        assertEquals("test2.pdf",facade.getMealPlanByUserID(user1.getId()).getFileName());
     }
 }

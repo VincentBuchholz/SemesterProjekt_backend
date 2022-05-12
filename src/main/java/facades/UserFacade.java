@@ -232,4 +232,16 @@ public class UserFacade {
         }
         return new MealPlanDTO(mealPlan);
     }
+
+    public MealPlanDTO getMealPlanByUserID(int userID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<MealPlanDTO> query = em.createQuery("SELECT new dtos.MealPlanDTO (m) FROM MealPlan m where m.user.id=:userID", MealPlanDTO.class);
+            query.setParameter("userID", userID);
+            MealPlanDTO mealPlan = query.getSingleResult();
+            return mealPlan;
+        } finally {
+            em.close();
+        }
+    }
 }

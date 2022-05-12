@@ -139,6 +139,14 @@ public class UserResource {
         MealPlanDTO mealPlanNew = USERFACADE.setMealPlan(mealPlanDTO);
         return Response.ok().entity(GSON.toJson(mealPlanNew)).build();
     }
+    @GET
+    @Path("/mealplan/{customerID}")
+    @RolesAllowed({"user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getMealPlanByUserID(@PathParam("customerID") int customerID) {
+        MealPlanDTO mealPlanDTO = USERFACADE.getMealPlanByUserID(customerID);
+        return Response.ok().entity(GSON.toJson(mealPlanDTO)).build();
+    }
 
 
 
