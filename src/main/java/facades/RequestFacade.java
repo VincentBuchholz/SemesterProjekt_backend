@@ -33,8 +33,9 @@ public class RequestFacade {
     }
 
     public RequestDTO createRequest(RequestDTO requestDTO){
-        Request request = new Request(requestDTO.getCoachID(),requestDTO.getFirstName(), requestDTO.getLastName(),requestDTO.getEmail(),requestDTO.getPhone(), requestDTO.getDesc());
         EntityManager em = emf.createEntityManager();
+        User user = em.find(User.class,requestDTO.getCoachID());
+        Request request = new Request(user,requestDTO.getFirstName(), requestDTO.getLastName(),requestDTO.getEmail(),requestDTO.getPhone(), requestDTO.getDesc());
         try{
             em.getTransaction().begin();
             em.persist(request);
@@ -50,7 +51,7 @@ public class RequestFacade {
 
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<RequestDTO> query = em.createQuery("SELECT NEW dtos.RequestDTO(r) FROM Request r where r.coachID =:coachID ", RequestDTO.class);
+            TypedQuery<RequestDTO> query = em.createQuery("SELECT NEW dtos.RequestDTO(r) FROM Request r where r.user.id =:coachID ", RequestDTO.class);
             query.setParameter("coachID",coachID);
             requestDTOS = query.getResultList();
             return requestDTOS;

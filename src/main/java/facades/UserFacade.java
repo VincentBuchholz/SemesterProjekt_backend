@@ -88,7 +88,7 @@ public class UserFacade {
             query.setParameter("id", id);
             User customer = query.getSingleResult();
 
-            TypedQuery<UserNutritionDTO> nutritionQuery = em.createQuery("SELECT new dtos.UserNutritionDTO(n) FROM UserNutrition n where n.userID=:customerID", UserNutritionDTO.class);
+            TypedQuery<UserNutritionDTO> nutritionQuery = em.createQuery("SELECT new dtos.UserNutritionDTO(n) FROM UserNutrition n where n.user.id=:customerID", UserNutritionDTO.class);
             nutritionQuery.setParameter("customerID", customer.getId());
             UserNutritionDTO nutritionDTO = nutritionQuery.getSingleResult();
 
@@ -118,7 +118,7 @@ public class UserFacade {
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();
-            UserNutrition userNutrition = new UserNutrition(user.getId(), 0, 0, 0, 0);
+            UserNutrition userNutrition = new UserNutrition(user, 0, 0, 0, 0);
             em.getTransaction().begin();
             em.persist(userNutrition);
             em.getTransaction().commit();
@@ -167,7 +167,7 @@ public class UserFacade {
     public UserNutritionDTO getNutritionsByUser(int userID) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<UserNutrition> query = em.createQuery("SELECT n FROM UserNutrition n where n.userID=:userID", UserNutrition.class);
+            TypedQuery<UserNutrition> query = em.createQuery("SELECT n FROM UserNutrition n where n.user.id=:userID", UserNutrition.class);
             query.setParameter("userID", userID);
             UserNutrition nutrition = query.getSingleResult();
             return new UserNutritionDTO(nutrition);

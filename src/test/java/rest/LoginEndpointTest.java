@@ -66,6 +66,10 @@ public class LoginEndpointTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from Request").executeUpdate();
+            em.createQuery("delete from UserWeighIn").executeUpdate();
+            em.createQuery("delete from UserNutrition").executeUpdate();
+            em.createQuery("delete from MealPlan ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 

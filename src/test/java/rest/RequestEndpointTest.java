@@ -43,6 +43,7 @@ public class RequestEndpointTest {
 
     Request request1;
     Request request2;
+    User coach;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -78,12 +79,21 @@ public class RequestEndpointTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from Request").executeUpdate();
+            em.createQuery("delete from UserWeighIn").executeUpdate();
+            em.createQuery("delete from UserNutrition").executeUpdate();
+            em.createQuery("delete from MealPlan ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
-            em.createQuery("delete from Request").executeUpdate();
+            coach = new User("coach1","test","test","test","test@test.dk","test");
+            em.getTransaction().commit();
+            em.getTransaction().begin();
+            em.persist(coach);
+            em.getTransaction().commit();
+            em.getTransaction().begin();
 
-            request1 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
-            request2 = new Request(1,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
+            request1 = new Request(coach,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
+            request2 = new Request(coach,"Karl","Larsson","KL@mail.dk","123111","hej med dig");
 
 
 
@@ -134,7 +144,7 @@ public class RequestEndpointTest {
     @Test
     public void testRequestSent() {
 
-        RequestDTO requestDTO = new RequestDTO(1,"karl","fisker","karlfisker@mail.dk","726151441","hello there I wanna get big");
+        RequestDTO requestDTO = new RequestDTO(coach.getId(),"karl","fisker","karlfisker@mail.dk","726151441","hello there I wanna get big");
         String requestBody = GSON.toJson(requestDTO);
 
         given()
@@ -165,7 +175,7 @@ public class RequestEndpointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/request/coach/1").then()
+                .get("/request/coach/"+coach.getId()).then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList("",RequestDTO.class);
         RequestDTO requestDTO1 = new RequestDTO(request1);

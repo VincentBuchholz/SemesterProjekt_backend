@@ -37,7 +37,7 @@ public class DiagramFacade {
         EntityManager em = emf.createEntityManager();
         UserNutritionDTO unDTO;
         try{
-            TypedQuery<UserNutritionDTO> query = em.createQuery("SELECT new dtos.UserNutritionDTO(u) from UserNutrition u where u.userID=:userID",UserNutritionDTO.class);
+            TypedQuery<UserNutritionDTO> query = em.createQuery("SELECT new dtos.UserNutritionDTO(u) from UserNutrition u where u.user.id=:userID",UserNutritionDTO.class);
             query.setParameter("userID",userID);
             unDTO = query.getSingleResult();
         } finally {

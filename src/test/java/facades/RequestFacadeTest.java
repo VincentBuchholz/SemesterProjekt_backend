@@ -39,13 +39,16 @@ class RequestFacadeTest {
         coach1.setRole(coachRole);
         coach2.setRole(coachRole);
 
-        request1 = new Request(1,"test1","test1","test1@test.dk","6453424","desc1");
-        request2 = new Request(1,"test2","test2","test2@test.dk","6453424","desc2");
+        request1 = new Request(coach1,"test1","test1","test1@test.dk","6453424","desc1");
+        request2 = new Request(coach1,"test2","test2","test2@test.dk","6453424","desc2");
 
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
         em.createNamedQuery("Request.deleteAllRows").executeUpdate();
+        em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
+        em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
+        em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
@@ -83,7 +86,7 @@ class RequestFacadeTest {
 
     @Test
     void getRequestList() {
-        assertEquals(2,facade.getRequestsByCoachID(1).size());
+        assertEquals(2,facade.getRequestsByCoachID(coach1.getId()).size());
     }
 
     @Test

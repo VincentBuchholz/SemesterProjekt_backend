@@ -11,8 +11,9 @@ public class UserNutrition {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "user_id")
-    private int userID;
+    @OneToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "calories")
     private int calories;
@@ -68,18 +69,15 @@ public class UserNutrition {
     }
 
     public int getUserID() {
-        return userID;
+        return user.getId();
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
 
     public UserNutrition() {
     }
 
-    public UserNutrition(int userID, int calories, int protein, int fat, int carbs) {
-        this.userID = userID;
+    public UserNutrition(User user, int calories, int protein, int fat, int carbs) {
+        this.user = user;
         this.calories = calories;
         this.protein = protein;
         this.fat = fat;
@@ -90,7 +88,7 @@ public class UserNutrition {
     public String toString() {
         return "UserNutrition{" +
                 "id=" + id +
-                ", userID=" + userID +
+                ", user=" + user +
                 ", calories=" + calories +
                 ", protein=" + protein +
                 ", fat=" + fat +

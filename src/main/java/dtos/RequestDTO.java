@@ -18,7 +18,9 @@ public class RequestDTO {
         if (request.getId()>0){
             this.id= request.getId();
         }
-        this.coachID = request.getCoachID();
+        if(request.getCoachID() > 0) {
+            this.coachID = request.getCoachID();
+        }
         this.firstName = request.getFirstName();
         this.lastName = request.getLastName();
         this.email = request.getEmail();

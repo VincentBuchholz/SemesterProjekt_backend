@@ -36,18 +36,6 @@ class DiagramFacadeTest {
         facade = DiagramFacade.getInstance(emf);
         userFacade = UserFacade.getUserFacade(emf);
 
-        UserNutrition un = new UserNutrition(1,3500,50,30,20);
-
-        EntityManager em = emf.createEntityManager();
-
-
-        try{
-            em.getTransaction().begin();
-            em.persist(un);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
 
     }
 
@@ -57,7 +45,12 @@ class DiagramFacadeTest {
         user1 = new User("test","test123","test","test","test","test");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
+        em.createNamedQuery("Request.deleteAllRows").executeUpdate();
         em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
+        em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
+        em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
+        em.createNamedQuery("User.deleteAllRows").executeUpdate();
+        em.createNamedQuery("Role.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
         try{
             em.getTransaction().begin();
@@ -75,6 +68,18 @@ class DiagramFacadeTest {
 
     @Test
     void getMacroChartByUserID() {
+        UserNutrition un = new UserNutrition(user1,3500,50,30,20);
+
+        EntityManager em = emf.createEntityManager();
+
+
+        try{
+            em.getTransaction().begin();
+            em.persist(un);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
         assertEquals("https://image-charts.com/chart?cht=p3&chs=700x500&chd=t:50,20,30&chl=Protein|Carbs|Fat&chdl=50%|20%|30%&chco=201dc2",facade.getMacroChartByUserID(1));
     }
     @Test

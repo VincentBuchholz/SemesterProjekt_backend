@@ -7,8 +7,9 @@ import javax.persistence.*;
 @NamedQuery(name = "Request.deleteAllRows", query = "DELETE from Request ")
 public class Request {
 
-    @Column(name = "coach_id")
-    private int coachID;
+    @OneToOne
+    @JoinColumn(name = "coachID")
+    private User user;
 
     @Column(name = "first_name")
     private String firstName;
@@ -33,8 +34,8 @@ public class Request {
     }
 
 
-    public Request(int coachID, String firstName, String lastName, String email,String phone, String desc) {
-        this.coachID = coachID;
+    public Request(User user, String firstName, String lastName, String email,String phone, String desc) {
+        this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -51,12 +52,9 @@ public class Request {
     }
 
     public int getCoachID() {
-        return coachID;
+        return user.getId();
     }
 
-    public void setCoachID(int coachID) {
-        this.coachID = coachID;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -102,7 +100,7 @@ public class Request {
     public String toString() {
         return "Request{" +
                 ", id = " + id +
-                ", coachID=" + coachID +
+                ", coachID=" + user.getId() +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

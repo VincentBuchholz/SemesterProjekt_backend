@@ -2,12 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.MealPlanDTO;
 import dtos.RequestDTO;
 import dtos.UserDTO;
-import entities.Request;
-import entities.Role;
-import entities.User;
-import entities.UserNutrition;
+import dtos.UserWeighInDTO;
+import entities.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
@@ -47,6 +46,8 @@ public class UserEndpointTest {
     Request request2;
     User user;
     UserNutrition userNutrition;
+    UserWeighIn userWeighIn;
+    MealPlan mealPlan;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -82,14 +83,16 @@ public class UserEndpointTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from Request").executeUpdate();
+            em.createQuery("delete from UserWeighIn").executeUpdate();
             em.createQuery("delete from UserNutrition ").executeUpdate();
+            em.createQuery("delete from MealPlan ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
-            em.createQuery("delete from Request").executeUpdate();
 
-            request1 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
-            request2 = new Request(1, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
-            userNutrition = new UserNutrition(1,3500,50,20,30);
+            request1 = new Request(user, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
+            request2 = new Request(user, "Karl", "Larsson", "KL@mail.dk", "123111", "hej med dig");
+
 
 
             Role userRole = new Role("user");
@@ -100,7 +103,6 @@ public class UserEndpointTest {
             admin.setRole(adminRole);
             em.persist(userRole);
             em.persist(adminRole);
-            em.persist(userNutrition);
             em.persist(user);
             em.persist(admin);
             em.persist(request1);
@@ -198,16 +200,115 @@ public class UserEndpointTest {
 
     @Test
     void GetMacroChartByCustomerIDTest(){
+        EntityManager em = emf.createEntityManager();
+        userNutrition = new UserNutrition(user,3500,50,20,30);
+        try{
+            em.getTransaction().begin();
+            em.persist(userNutrition);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
         login("coach", "test");
         given()
                 .contentType("application/json")
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/macrochart/1")
+                .get("/user/macrochart/"+user.getId())
                 .then()
                 .assertThat()
                 .statusCode(200)
                 .body("url", notNullValue());
     }
+
+    @Test
+    void GetWeightChartByCustomerIDTest(){
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/weightchart/1")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("url", notNullValue());
+    }
+
+    @Test
+    void GetLatestWeightTest(){
+        EntityManager em = emf.createEntityManager();
+        userWeighIn = new UserWeighIn(user,87.5);
+        try{
+            em.getTransaction().begin();
+            em.persist(userWeighIn);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+
+
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/latestweight/"+user.getId())
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("weight",equalTo(87.5f));
+    }
+
+
+    @Test
+    void SetMealPlanTest(){
+        MealPlan mealPlan = new MealPlan(user,"test.pdf");
+        MealPlanDTO mealPlanDTO = new MealPlanDTO(mealPlan);
+        String requestBody = GSON.toJson(mealPlanDTO);
+
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/user/mealplan")
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    void GetMealPlanTest(){
+        EntityManager em = emf.createEntityManager();
+        mealPlan = new MealPlan(user,"test.pdf");
+        try{
+            em.getTransaction().begin();
+            em.persist(mealPlan);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+
+
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/mealplan/"+user.getId())
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("fileName",equalTo(mealPlan.getFileName()));
+    }
+
+
 }

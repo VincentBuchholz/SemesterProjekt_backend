@@ -48,11 +48,12 @@ class UserFacadeTest {
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
-        em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
+        em.createNamedQuery("Request.deleteAllRows").executeUpdate();
         em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
+        em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
+        em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
-        em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
         try{
             em.getTransaction().begin();

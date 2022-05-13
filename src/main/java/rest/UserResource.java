@@ -115,7 +115,6 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getWeightChart(@PathParam("customerID") int customerID) {
         String chart = DIAGRAM_FACADE.getWeightChartByUserID(customerID);
-        System.out.println(chart);
         JsonObject jobj = new JsonObject();
         jobj.addProperty("url",chart);
         return Response.ok().entity(GSON.toJson(jobj)).build();
