@@ -2,10 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.MealPlanDTO;
-import dtos.RequestDTO;
-import dtos.UserDTO;
-import dtos.UserWeighInDTO;
+import dtos.*;
 import entities.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -48,6 +45,7 @@ public class UserEndpointTest {
     UserNutrition userNutrition;
     UserWeighIn userWeighIn;
     MealPlan mealPlan;
+    WorkoutPlan workoutPlan;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -87,6 +85,7 @@ public class UserEndpointTest {
             em.createQuery("delete from UserWeighIn").executeUpdate();
             em.createQuery("delete from UserNutrition ").executeUpdate();
             em.createQuery("delete from MealPlan ").executeUpdate();
+            em.createQuery("delete from WorkoutPlan ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
@@ -308,6 +307,51 @@ public class UserEndpointTest {
                 .assertThat()
                 .statusCode(200)
                 .body("fileName",equalTo(mealPlan.getFileName()));
+    }
+
+    @Test
+    void SetWorkoutPlanTest(){
+        WorkoutPlan workoutPlan = new WorkoutPlan(user,"test.pdf");
+        WorkoutPlanDTO workoutPlanDTO = new WorkoutPlanDTO(workoutPlan);
+        String requestBody = GSON.toJson(workoutPlanDTO);
+
+        login("coach", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/user/workoutplan")
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    void GetWorkoutPlanTest(){
+        EntityManager em = emf.createEntityManager();
+        workoutPlan = new WorkoutPlan(user,"test.pdf");
+        try{
+            em.getTransaction().begin();
+            em.persist(workoutPlan);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/user/workoutplan/"+user.getId())
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("fileName",equalTo(workoutPlan.getFileName()));
     }
 
 

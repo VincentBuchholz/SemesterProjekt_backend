@@ -244,4 +244,45 @@ public class UserFacade {
             em.close();
         }
     }
+
+    public WorkoutPlanDTO setWorkoutPlan(WorkoutPlanDTO workoutPlanDTO) {
+        EntityManager em = emf.createEntityManager();
+        WorkoutPlan workoutPlan;
+        try {
+            WorkoutPlan workoutPlanFound;
+            try {
+                TypedQuery<WorkoutPlan> query = em.createQuery("SELECT w from WorkoutPlan w where w.user.id =:userID", WorkoutPlan.class);
+                query.setParameter("userID", workoutPlanDTO.getUserID());
+                workoutPlanFound = query.getSingleResult();
+                if (workoutPlanFound != null) {
+                    em.getTransaction().begin();
+                    em.remove(workoutPlanFound);
+                    em.getTransaction().commit();
+                }
+            } catch (NoResultException ignored) {
+
+            }
+
+            User userFound = em.find(User.class, workoutPlanDTO.getUserID());
+            workoutPlan = new WorkoutPlan(userFound, workoutPlanDTO.getFileName());
+            em.getTransaction().begin();
+            em.persist(workoutPlan);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new WorkoutPlanDTO(workoutPlan);
+    }
+
+    public WorkoutPlanDTO getWorkoutPlanByUserID(int userID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<WorkoutPlanDTO> query = em.createQuery("SELECT new dtos.WorkoutPlanDTO (w) FROM WorkoutPlan w where w.user.id=:userID", WorkoutPlanDTO.class);
+            query.setParameter("userID", userID);
+            WorkoutPlanDTO workoutPlan = query.getSingleResult();
+            return workoutPlan;
+        } finally {
+            em.close();
+        }
+    }
 }

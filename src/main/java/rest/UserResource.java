@@ -3,10 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import dtos.MealPlanDTO;
-import dtos.UserDTO;
-import dtos.UserNutritionDTO;
-import dtos.UserWeighInDTO;
+import dtos.*;
 import errorhandling.UsernameTakenException;
 import facades.DiagramFacade;
 import facades.UserFacade;
@@ -145,6 +142,25 @@ public class UserResource {
     public Response getMealPlanByUserID(@PathParam("customerID") int customerID) {
         MealPlanDTO mealPlanDTO = USERFACADE.getMealPlanByUserID(customerID);
         return Response.ok().entity(GSON.toJson(mealPlanDTO)).build();
+    }
+
+    @POST
+    @Path("/workoutplan")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response setWorkoutPlan(String content) {
+        WorkoutPlanDTO workoutPlanDTO = GSON.fromJson(content, WorkoutPlanDTO.class);
+        WorkoutPlanDTO workoutPlanNew = USERFACADE.setWorkoutPlan(workoutPlanDTO);
+        return Response.ok().entity(GSON.toJson(workoutPlanNew)).build();
+    }
+    @GET
+    @Path("/workoutplan/{customerID}")
+    @RolesAllowed({"user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getWorkoutPlanByUserID(@PathParam("customerID") int customerID) {
+        WorkoutPlanDTO workoutPlanDTO = USERFACADE.getWorkoutPlanByUserID(customerID);
+        return Response.ok().entity(GSON.toJson(workoutPlanDTO)).build();
     }
 
 

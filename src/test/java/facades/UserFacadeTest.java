@@ -4,6 +4,7 @@ import dtos.*;
 import entities.MealPlan;
 import entities.Role;
 import entities.User;
+import entities.WorkoutPlan;
 import errorhandling.UsernameTakenException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,6 +53,7 @@ class UserFacadeTest {
         em.createNamedQuery("UserWeighIn.deleteAllRows").executeUpdate();
         em.createNamedQuery("UserNutrition.deleteAllRows").executeUpdate();
         em.createNamedQuery("MealPlan.deleteAllRows").executeUpdate();
+        em.createNamedQuery("WorkoutPlan.deleteAllRows").executeUpdate();
         em.createNamedQuery("User.deleteAllRows").executeUpdate();
         em.createNamedQuery("Role.deleteAllRows").executeUpdate();
         em.getTransaction().commit();
@@ -164,5 +166,25 @@ class UserFacadeTest {
         facade.setMealPlan(mealPlanDTO1);
         facade.setMealPlan(mealPlanDTO2);
         assertEquals("test2.pdf",facade.getMealPlanByUserID(user1.getId()).getFileName());
+    }
+
+
+    @Test
+    void setWorkoutPlanTest() {
+        System.out.println("Set workoutplan test!");
+        WorkoutPlanDTO workoutPlanDTO = new WorkoutPlanDTO(new WorkoutPlan(user1,"test.pdf"));
+        WorkoutPlanDTO workoutPlanDTO2 = new WorkoutPlanDTO(new WorkoutPlan(user1,"test2.pdf"));
+        facade.setWorkoutPlan(workoutPlanDTO);
+        assertEquals("test2.pdf",facade.setWorkoutPlan(workoutPlanDTO2).getFileName());
+    }
+
+    @Test
+    void getWorkoutPlanByUserID() {
+        System.out.println("get workoutplan test!");
+        WorkoutPlanDTO workoutPlanDTO = new WorkoutPlanDTO(new WorkoutPlan(user1,"test.pdf"));
+        WorkoutPlanDTO workoutPlanDTO2 = new WorkoutPlanDTO(new WorkoutPlan(user2,"test2.pdf"));
+        facade.setWorkoutPlan(workoutPlanDTO);
+        facade.setWorkoutPlan(workoutPlanDTO2);
+        assertEquals("test2.pdf",facade.getWorkoutPlanByUserID(user2.getId()).getFileName());
     }
 }
