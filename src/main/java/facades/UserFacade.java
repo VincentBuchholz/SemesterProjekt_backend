@@ -1,5 +1,8 @@
 package facades;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import dtos.*;
 import entities.*;
 
@@ -8,7 +11,10 @@ import javax.persistence.*;
 import errorhandling.NotFoundException;
 import errorhandling.UsernameTakenException;
 import security.errorhandling.AuthenticationException;
+import utils.HttpUtils;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -284,5 +290,15 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+
+    public CalorieBurnedDTO calculateCaloriesBurned(String activityID, int userID,int activityMin) throws IOException {
+        UserWeighInDTO userWeighInDTO = getLatestUserWeighin(userID);
+        String URL = "https://fitness-calculator.p.rapidapi.com/burnedcalorie?activityid="+activityID+"&activitymin="+activityMin+"&weight="+userWeighInDTO.getWeight();
+        String result = HttpUtils.fetchData(URL);
+        JsonObject response = new Gson().fromJson(result, JsonObject.class);
+        JsonObject data = new Gson().fromJson(response.get("data"), JsonObject.class);
+        System.out.println(data);
+        return new CalorieBurnedDTO(data.get("burnedCalorie").getAsString(), data.get("unit").getAsString());
     }
 }

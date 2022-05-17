@@ -13,6 +13,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.IOException;
 import java.util.List;
 
 @Path("user")
@@ -161,6 +162,15 @@ public class UserResource {
     public Response getWorkoutPlanByUserID(@PathParam("customerID") int customerID) {
         WorkoutPlanDTO workoutPlanDTO = USERFACADE.getWorkoutPlanByUserID(customerID);
         return Response.ok().entity(GSON.toJson(workoutPlanDTO)).build();
+    }
+
+    @GET
+    @Path("/caloriesburned/{customerID}/{activityID}/{activitymin}")
+    @RolesAllowed({"user"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response calculateCaloriesBurned(@PathParam("customerID") int customerID,@PathParam("activityID") String activityID,@PathParam("activitymin") int activityMin) throws IOException {
+        CalorieBurnedDTO calorieBurnedDTO = USERFACADE.calculateCaloriesBurned(activityID,customerID,activityMin);
+        return Response.ok().entity(GSON.toJson(calorieBurnedDTO)).build();
     }
 
 

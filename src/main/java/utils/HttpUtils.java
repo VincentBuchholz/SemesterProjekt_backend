@@ -1,5 +1,9 @@
 package utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -15,6 +19,8 @@ public class HttpUtils {
         //con.setRequestProperty("Accept", "application/json;charset=UTF-8");
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("User-Agent", "server");
+        con.setRequestProperty("X-RapidAPI-Host", "fitness-calculator.p.rapidapi.com");
+        con.setRequestProperty("X-RapidAPI-Key", "57c4cf4a3cmsha1733afccea0a99p1ca0ddjsnb9150d45bfe5");
 
         Scanner scan = new Scanner(con.getInputStream());
         String jsonStr = null;
