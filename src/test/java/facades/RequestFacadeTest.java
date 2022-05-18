@@ -105,4 +105,10 @@ class RequestFacadeTest {
         facade.deleteRequestByID(requestCreated.getId());
 
     }
+
+    @Test
+    void getAmountOfRequestsByCoachID() {
+        System.out.println("TEST amount of requests by coach id");
+        assertEquals(2,facade.getAmountOfRequestsByCoachID(coach1.getId()));
+    }
 }

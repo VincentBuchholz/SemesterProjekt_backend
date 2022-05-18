@@ -107,9 +107,6 @@ public class UserFacade {
     }
 
     public UserDTO createUser(UserDTO userDTO) throws UsernameTakenException {
-
-        System.out.println(usernameTaken(userDTO.getUserName()));
-
         if (usernameTaken(userDTO.getUserName())) {
             throw new UsernameTakenException("Username is taken");
         }
@@ -300,5 +297,17 @@ public class UserFacade {
         JsonObject data = new Gson().fromJson(response.get("data"), JsonObject.class);
         System.out.println(data);
         return new CalorieBurnedDTO(data.get("burnedCalorie").getAsString(), data.get("unit").getAsString());
+    }
+
+    public int getAmountOfCustomersByCoachID(int coachID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createQuery("SELECT count(u) FROM User u where u.coachID =:coachID ");
+            query.setParameter("coachID",coachID);
+            long amount = (long) query.getSingleResult();
+            return (int) amount;
+        } finally {
+            em.close();
+        }
     }
 }

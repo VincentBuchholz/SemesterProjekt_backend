@@ -2,6 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import dtos.RequestDTO;
 import dtos.UserDTO;
 import entities.User;
@@ -76,5 +77,16 @@ public class RequestResource {
     public Response deleteRequestByID(@PathParam("id") int id) {
         REQUESTFACADE.deleteRequestByID(id);
         return Response.ok().entity("Deleted").build();
+    }
+
+    @GET
+    @Path("/amount/{coachID}")
+    @RolesAllowed({"coach"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAmountOfRequestsByCoachID(@PathParam("coachID") int coachID) {
+        int amount = REQUESTFACADE.getAmountOfRequestsByCoachID(coachID);
+        JsonObject jobj = new JsonObject();
+        jobj.addProperty("amount",amount);
+        return Response.ok().entity(GSON.toJson(jobj)).build();
     }
 }

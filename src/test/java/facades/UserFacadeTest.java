@@ -187,4 +187,14 @@ class UserFacadeTest {
         facade.setWorkoutPlan(workoutPlanDTO2);
         assertEquals("test2.pdf",facade.getWorkoutPlanByUserID(user2.getId()).getFileName());
     }
+
+    @Test
+    void getAmountOfClientsByCoachIDTest() throws UsernameTakenException {
+        System.out.println("TEST amount of clients by coach id");
+        User userTest1 = new User("testuser1", "testuserpass3","testuser3","testuser3","testuser@mail.dk","+4565432211",coach2.getId());
+        User userTest2 = new User("testuser2", "testuserpass3","testuser3","testuser3","testuser@mail.dk","+4565432211",coach2.getId());
+        facade.createUser(new UserDTO(userTest1));
+        facade.createUser(new UserDTO(userTest2));
+        assertEquals(2,facade.getAmountOfCustomersByCoachID(coach2.getId()));
+    }
 }

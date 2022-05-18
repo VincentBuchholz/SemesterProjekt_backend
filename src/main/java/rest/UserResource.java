@@ -61,7 +61,7 @@ public class UserResource {
     @Path("/customer/{customerID}")
     @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getRequestByRequestID(@PathParam("customerID") int customerID) {
+    public Response getCustomerByCustomerID(@PathParam("customerID") int customerID) {
         UserDTO userDTO = USERFACADE.getCustomerByID(customerID);
         return Response.ok().entity(GSON.toJson(userDTO)).build();
     }
@@ -173,15 +173,15 @@ public class UserResource {
         return Response.ok().entity(GSON.toJson(calorieBurnedDTO)).build();
     }
 
+    @GET
+    @Path("/amountofcustomers/{coachID}")
+    @RolesAllowed({"coach"})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAmountOfClientsByCoachID(@PathParam("coachID") int coachID) {
+        int amount = USERFACADE.getAmountOfCustomersByCoachID(coachID);
+        JsonObject jobj = new JsonObject();
+        jobj.addProperty("amount",amount);
+        return Response.ok().entity(GSON.toJson(jobj)).build();
+    }
 
-
-
-//    @GET
-//    @Path("/{requestID}")
-//    @RolesAllowed("coach")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public Response getRequestByRequestID(@PathParam("requestID") int requestID) {
-//        RequestDTO requestDTO = REQUESTFACADE.getRequestByRequestID(requestID);
-//        return Response.ok().entity(GSON.toJson(requestDTO)).build();
-//    }
 }

@@ -213,4 +213,17 @@ public class RequestEndpointTest {
                 .then()
                 .statusCode(200);
     }
+
+    @Test
+    void GetAmountOfRequestsByCoachIDTest() {
+        login("coach", "test");
+       given()
+                .contentType("application/json")
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/request/amount/"+coach.getId()).then()
+                .statusCode(200)
+               .body("amount",equalTo(2));
+    }
 }

@@ -8,6 +8,7 @@ import security.errorhandling.AuthenticationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.List;
@@ -55,6 +56,18 @@ public class RequestFacade {
             query.setParameter("coachID",coachID);
             requestDTOS = query.getResultList();
             return requestDTOS;
+        } finally {
+            em.close();
+        }
+    }
+
+    public int getAmountOfRequestsByCoachID(int coachID) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Query query = em.createQuery("SELECT count(r) FROM Request r where r.user.id =:coachID ");
+            query.setParameter("coachID",coachID);
+            long amount = (long) query.getSingleResult();
+            return (int) amount;
         } finally {
             em.close();
         }
