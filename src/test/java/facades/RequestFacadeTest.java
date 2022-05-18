@@ -95,4 +95,14 @@ class RequestFacadeTest {
 
         assertEquals(requestDTO,facade.getRequestByRequestID(request1.getId()));
     }
+
+    @Test
+    void deleteRequestByIDTest() {
+        System.out.println("TEST CREATE REQUEST");
+        RequestDTO requestDTO = new RequestDTO(coach1.getId(),"viggo","mogens","viggo@mail.dk","645251551","get fit fam");
+        RequestDTO requestCreated = facade.createRequest(requestDTO);
+        System.out.println(requestCreated);
+        facade.deleteRequestByID(requestCreated.getId());
+
+    }
 }

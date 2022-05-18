@@ -69,4 +69,17 @@ public class RequestFacade {
             em.close();
         }
     }
+
+    public void deleteRequestByID(int id){
+        EntityManager em = emf.createEntityManager();
+        try {
+            Request r = em.find(Request.class, id);
+            em.getTransaction().begin();
+            em.remove(r);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+
+    }
 }

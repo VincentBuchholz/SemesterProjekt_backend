@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import errorhandling.NotFoundException;
 import facades.RequestFacade;
 import facades.UserFacade;
 import utils.EMF_Creator;
@@ -64,5 +65,16 @@ public class RequestResource {
     public Response getRequestByRequestID(@PathParam("requestID") int requestID) {
         RequestDTO requestDTO = REQUESTFACADE.getRequestByRequestID(requestID);
         return Response.ok().entity(GSON.toJson(requestDTO)).build();
+    }
+
+
+    @DELETE
+    @Path("/delete/{id}")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response deleteRequestByID(@PathParam("id") int id) {
+        REQUESTFACADE.deleteRequestByID(id);
+        return Response.ok().entity("Deleted").build();
     }
 }

@@ -201,4 +201,16 @@ public class RequestEndpointTest {
 
         assertThat(requestDTO,equalTo(requestDTO1));
     }
+
+    @Test
+    public void testDeleteRequestByID() {
+        login("coach", "test");
+        given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("x-access-token", securityToken)
+                .delete("/request/delete/{id}", request1.getId())
+                .then()
+                .statusCode(200);
+    }
 }

@@ -104,10 +104,12 @@ public class RequestDTO {
     @Override
     public String toString() {
         return "RequestDTO{" +
-                "coachID=" + coachID +
+                "id=" + id +
+                ", coachID=" + coachID +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", desc='" + desc + '\'' +
                 '}';
     }
