@@ -80,7 +80,7 @@ class DiagramFacadeTest {
         } finally {
             em.close();
         }
-        assertEquals("https://image-charts.com/chart?cht=p3&chs=700x500&chd=t:50,20,30&chl=Protein|Carbs|Fat&chdl=50%|20%|30%&chco=201dc2",facade.getMacroChartByUserID(user1.getId()));
+        assertEquals("https://image-charts.com/chart?cht=p3&chs=700x500&chd=t:50,20,30&chl=Protein|Carbs|Fat&chdl=50%|20%|30%&chco=005F6A",facade.getMacroChartByUserID(user1.getId()));
     }
     @Test
     void getUserWieghtChart(){
@@ -102,6 +102,6 @@ class DiagramFacadeTest {
             date.append("%7C"+day+"-"+month+"-"+year);
         }
 
-        assertEquals("https://image-charts.com/chart?chco=201DC2&chd=a%3A80.0%2C81.0&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy",facade.getWeightChartByUserID(user1.getId()));
+        assertEquals("https://image-charts.com/chart?chco=005F6A&chd=a%3A80.0%2C81.0&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy",facade.getWeightChartByUserID(user1.getId()));
     }
 }
