@@ -112,6 +112,12 @@ class UserFacadeTest {
         UserDTO newUserDTO = facade.createUser(userDTO);
         assertEquals("testuser",facade.getCustomerByID(newUserDTO.getId()).getFirstName());
     }
+    @Test
+    void getCoachByID(){
+        System.out.println("get customer by id test!");
+
+        assertEquals("Emil",facade.getCoachByID(coach2.getId()).getFirstName());
+    }
 
     @Test
     void getNutritionsByUserID() throws UsernameTakenException {

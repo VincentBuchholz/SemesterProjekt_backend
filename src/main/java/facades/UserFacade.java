@@ -106,6 +106,19 @@ public class UserFacade {
         }
     }
 
+    public UserDTO getCoachByID(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u where u.id=:id", User.class);
+            query.setParameter("id", id);
+            User customer = query.getSingleResult();
+            UserDTO customerDTO = new UserDTO(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPhone());
+            return customerDTO;
+        } finally {
+            em.close();
+        }
+    }
+
     public UserDTO createUser(UserDTO userDTO) throws UsernameTakenException {
         if (usernameTaken(userDTO.getUserName())) {
             throw new UsernameTakenException("Username is taken");

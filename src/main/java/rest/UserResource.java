@@ -58,6 +58,15 @@ public class UserResource {
     }
 
     @GET
+    @Path("/coach/{coachID}")
+    @RolesAllowed("coach")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getCoachByID(@PathParam("coachID") int coachID) {
+        UserDTO userDTO = USERFACADE.getCoachByID(coachID);
+        return Response.ok().entity(GSON.toJson(userDTO)).build();
+    }
+
+    @GET
     @Path("/customer/{customerID}")
     @RolesAllowed("coach")
     @Produces({MediaType.APPLICATION_JSON})
@@ -65,6 +74,7 @@ public class UserResource {
         UserDTO userDTO = USERFACADE.getCustomerByID(customerID);
         return Response.ok().entity(GSON.toJson(userDTO)).build();
     }
+
     @GET
     @Path("/nutrition/{customerID}")
     @RolesAllowed({"coach","user"})
