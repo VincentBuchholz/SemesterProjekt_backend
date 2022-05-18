@@ -55,7 +55,7 @@ public class DiagramFacade {
         carbs = Math.round(carbs);
         DecimalFormat format = new DecimalFormat("0.#");
 
-        return "https://image-charts.com/chart?cht=p3&chs=700x500&chd=t:"+format.format(protein)+","+format.format(carbs)+","+format.format(fat)+"&chl=Protein|Carbs|Fat&chdl="+format.format(protein)+"%|"+format.format(carbs)+"%|"+format.format(fat)+"%&chco=201dc2";
+        return "https://image-charts.com/chart?cht=p3&chs=700x500&chd=t:"+format.format(protein)+","+format.format(carbs)+","+format.format(fat)+"&chl=Protein|Carbs|Fat&chdl="+format.format(protein)+"%|"+format.format(carbs)+"%|"+format.format(fat)+"%&chco=005F6A";
     }
 
 
@@ -91,6 +91,6 @@ public class DiagramFacade {
             date.append("%7C"+day+"-"+month+"-"+year);
             count++;
         }
-       return "https://image-charts.com/chart?chco=201DC2&chd="+weight+"&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy";
+       return "https://image-charts.com/chart?chco=005F6A&chd="+weight+"&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy";
     }
 }
