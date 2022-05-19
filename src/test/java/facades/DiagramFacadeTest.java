@@ -102,6 +102,6 @@ class DiagramFacadeTest {
             date.append("%7C"+day+"-"+month+"-"+year);
         }
 
-        assertEquals("https://image-charts.com/chart?chco=005F6A&chd=a%3A80.0%2C81.0&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy",facade.getWeightChartByUserID(user1.getId()));
+        assertEquals("https://image-charts.com/chart?chco=005F6A&chd=a%3A80.0%2C81.0&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=Weight&chxl="+date+"&chxt=x%2Cy",facade.getWeightChartByUserID(user1.getId()));
     }
 }

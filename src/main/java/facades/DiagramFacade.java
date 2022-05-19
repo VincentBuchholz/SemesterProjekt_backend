@@ -91,6 +91,6 @@ public class DiagramFacade {
             date.append("%7C"+day+"-"+month+"-"+year);
             count++;
         }
-       return "https://image-charts.com/chart?chco=005F6A&chd="+weight+"&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=V%C3%A6gt&chxl="+date+"&chxt=x%2Cy";
+       return "https://image-charts.com/chart?chco=005F6A&chd="+weight+"&chdlp=r&chg=1%2C1&chls=3&chs=700x450&cht=ls&chtt=Weight&chxl="+date+"&chxt=x%2Cy";
     }
 }
