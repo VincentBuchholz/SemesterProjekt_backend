@@ -10,6 +10,8 @@ import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DiagramFacade {
@@ -63,9 +65,11 @@ public class DiagramFacade {
         EntityManager em = emf.createEntityManager();
         List<UserWeighInDTO> userWeighInDTOS;
         try{
-            TypedQuery<UserWeighInDTO> query = em.createQuery("SELECT new dtos.UserWeighInDTO (u) from UserWeighIn u where u.user.id =:userID order by u.date asc",UserWeighInDTO.class);
+            TypedQuery<UserWeighInDTO> query = em.createQuery("SELECT new dtos.UserWeighInDTO (u) from UserWeighIn u where u.user.id =:userID order by u.id desc",UserWeighInDTO.class);
             query.setParameter("userID",userID);
+            query.setMaxResults(10);
             userWeighInDTOS = query.getResultList();
+            Collections.reverse(userWeighInDTOS);
         } finally {
             em.close();
         }
